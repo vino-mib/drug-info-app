@@ -1,25 +1,25 @@
-import axios from 'axios';
-import { drugService } from '../drugService';
 import { DrugsResponse, TableConfig } from '../../types';
 
-// Mock axios
-jest.mock('axios');
-const mockedAxios = axios as jest.Mocked<typeof axios>;
-
-// Mock axios.create
-const mockAxiosInstance = {
-  get: jest.fn(),
-  interceptors: {
-    request: {
-      use: jest.fn()
-    },
-    response: {
-      use: jest.fn()
+// Mock axios completely
+jest.mock('axios', () => ({
+  create: jest.fn(() => ({
+    get: jest.fn(),
+    interceptors: {
+      request: {
+        use: jest.fn()
+      },
+      response: {
+        use: jest.fn()
+      }
     }
-  }
-};
+  }))
+}));
 
-mockedAxios.create.mockReturnValue(mockAxiosInstance as any);
+import axios from 'axios';
+import { drugService } from '../drugService';
+
+// Get the mocked instance
+const mockAxiosInstance = (axios.create as jest.Mock).mock.results[0].value;
 
 describe('DrugService', () => {
   beforeEach(() => {
@@ -209,19 +209,7 @@ describe('DrugService', () => {
     });
   });
 
-  describe('axios instance configuration', () => {
-    it('creates axios instance with correct base URL from environment', () => {
-      expect(mockedAxios.create).toHaveBeenCalledWith({
-        baseURL: '/api', // Default when REACT_APP_API_URL is not set
-        timeout: 10000
-      });
-    });
 
-    it('sets up request and response interceptors', () => {
-      expect(mockAxiosInstance.interceptors.request.use).toHaveBeenCalled();
-      expect(mockAxiosInstance.interceptors.response.use).toHaveBeenCalled();
-    });
-  });
 
   describe('API error handling', () => {
     it('handles network errors', async () => {

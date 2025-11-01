@@ -159,11 +159,6 @@ const App: React.FC = () => {
         <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography variant="h6">
             Drug List
-            {selectedCompany && (
-              <Typography component="span" variant="body2" color="text.secondary" sx={{ ml: 1 }}>
-                (Filtered by: {selectedCompany})
-              </Typography>
-            )}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             Total: {totalCount.toLocaleString()} drugs

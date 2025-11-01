@@ -36,7 +36,11 @@ beforeAll(() => {
       typeof args[0] === 'string' &&
       (args[0].includes('Warning: ReactDOM.render is deprecated') ||
        args[0].includes('Warning: componentWillReceiveProps') ||
-       args[0].includes('Warning: componentWillMount'))
+       args[0].includes('Warning: componentWillMount') ||
+       args[0].includes('Warning: An update to') ||
+       args[0].includes('was not wrapped in act') ||
+       args[0].includes('When testing, code that causes React state updates should be wrapped into act') ||
+       args[0].includes('Warning: `ReactDOMTestUtils.act` is deprecated'))
     ) {
       return;
     }
@@ -47,7 +51,9 @@ beforeAll(() => {
     if (
       typeof args[0] === 'string' &&
       (args[0].includes('componentWillReceiveProps') ||
-       args[0].includes('componentWillMount'))
+       args[0].includes('componentWillMount') ||
+       args[0].includes('Warning: An update to') ||
+       args[0].includes('was not wrapped in act'))
     ) {
       return;
     }

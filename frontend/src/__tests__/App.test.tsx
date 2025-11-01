@@ -213,9 +213,6 @@ describe('App Component', () => {
         sortOrder: 'desc'
       });
     });
-
-    // Check if filter status is displayed
-    expect(screen.getByText('(Filtered by: Merck Sharp & Dohme Corp.)')).toBeInTheDocument();
   });
 
   

@@ -8,8 +8,9 @@ import {
   Typography,
   Chip,
   SelectChangeEvent,
+  Button,
 } from '@mui/material';
-import { Business as BusinessIcon } from '@mui/icons-material';
+import { Business as BusinessIcon, Clear as ClearIcon } from '@mui/icons-material';
 
 interface CompanyFilterProps {
   companies: string[];
@@ -28,6 +29,10 @@ const CompanyFilter: React.FC<CompanyFilterProps> = ({
     onFilterChange(event.target.value);
   };
 
+  const handleClear = () => {
+    onFilterChange('');
+  };
+
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
       <Typography variant="h6" sx={{ minWidth: 'auto' }}>
@@ -41,15 +46,7 @@ const CompanyFilter: React.FC<CompanyFilterProps> = ({
           value={selectedCompany}
           label="Select Company"
           onChange={handleChange}
-          displayEmpty
           renderValue={(selected) => {
-            if (!selected) {
-              return (
-                <Typography sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
-                  All Companies
-                </Typography>
-              );
-            }
             return (
               <Typography
                 sx={{
@@ -76,6 +73,17 @@ const CompanyFilter: React.FC<CompanyFilterProps> = ({
           ))}
         </Select>
       </FormControl>
+      
+      <Button
+        variant="outlined"
+        color="secondary"
+        startIcon={<ClearIcon />}
+        onClick={handleClear}
+        disabled={disabled || !selectedCompany}
+        sx={{ minWidth: 'auto', height: '56px' }}
+      >
+        Clear
+      </Button>
     </Box>
   );
 };

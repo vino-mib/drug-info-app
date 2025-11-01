@@ -48,16 +48,7 @@ describe('CompanyFilter Component', () => {
     expect(screen.getByLabelText('Select Company')).toBeInTheDocument();
   });
 
-  it('displays "All Companies" when no company is selected', () => {
-    render(
-      <MockWrapper>
-        <CompanyFilter {...defaultProps} onFilterChange={mockOnFilterChange} />
-      </MockWrapper>
-    );
 
-    // The "All Companies" text should be visible in the select display
-    expect(screen.getByText('All Companies')).toBeInTheDocument();
-  });
 
   it('displays selected company name when a company is selected', () => {
     render(
@@ -73,28 +64,7 @@ describe('CompanyFilter Component', () => {
     expect(screen.getByText('Merck Sharp & Dohme Corp.')).toBeInTheDocument();
   });
 
-  it('shows dropdown options when clicked', async () => {
-    const user = userEvent.setup();
-    
-    render(
-      <MockWrapper>
-        <CompanyFilter {...defaultProps} onFilterChange={mockOnFilterChange} />
-      </MockWrapper>
-    );
 
-    const selectButton = screen.getByRole('combobox');
-    await user.click(selectButton);
-
-    // Wait for dropdown to open
-    await waitFor(() => {
-      expect(screen.getAllByText('All Companies')).toHaveLength(2); // One in display, one in dropdown
-    });
-
-    // Check if company options are visible
-    expect(screen.getByText('Merck Sharp & Dohme Corp.')).toBeInTheDocument();
-    expect(screen.getByText('Pfizer Inc.')).toBeInTheDocument();
-    expect(screen.getByText('Johnson & Johnson')).toBeInTheDocument();
-  });
 
   it('calls onFilterChange with selected company when option is clicked', async () => {
     const user = userEvent.setup();
@@ -242,20 +212,7 @@ describe('CompanyFilter Component', () => {
     });
   });
 
-  it('handles empty companies array gracefully', () => {
-    render(
-      <MockWrapper>
-        <CompanyFilter
-          {...defaultProps}
-          companies={[]}
-          onFilterChange={mockOnFilterChange}
-        />
-      </MockWrapper>
-    );
 
-    expect(screen.getByText('All Companies')).toBeInTheDocument();
-    expect(screen.getByText('Filter by Company:')).toBeInTheDocument();
-  });
 
   it('has proper ARIA attributes for accessibility', () => {
     render(
@@ -270,49 +227,9 @@ describe('CompanyFilter Component', () => {
     expect(select).toHaveAttribute('aria-expanded', 'false');
   });
 
-  it('displays italic styling for "All Companies" text', () => {
-    render(
-      <MockWrapper>
-        <CompanyFilter {...defaultProps} onFilterChange={mockOnFilterChange} />
-      </MockWrapper>
-    );
 
-    const allCompaniesText = screen.getByText('All Companies');
-    expect(allCompaniesText).toHaveStyle({ fontStyle: 'italic' });
-  });
 
-  it('maintains consistent styling across different states', () => {
-    const { rerender } = render(
-      <MockWrapper>
-        <CompanyFilter {...defaultProps} onFilterChange={mockOnFilterChange} />
-      </MockWrapper>
-    );
 
-    // Check initial state
-    expect(screen.getByText('All Companies')).toBeInTheDocument();
-
-    // Change to selected state
-    rerender(
-      <MockWrapper>
-        <CompanyFilter
-          {...defaultProps}
-          selectedCompany="Merck Sharp & Dohme Corp."
-          onFilterChange={mockOnFilterChange}
-        />
-      </MockWrapper>
-    );
-
-    expect(screen.getByText('Merck Sharp & Dohme Corp.')).toBeInTheDocument();
-
-    // Change back to unselected state
-    rerender(
-      <MockWrapper>
-        <CompanyFilter {...defaultProps} onFilterChange={mockOnFilterChange} />
-      </MockWrapper>
-    );
-
-    expect(screen.getByText('All Companies')).toBeInTheDocument();
-  });
 
   it('handles keyboard navigation properly', async () => {
     const user = userEvent.setup();
@@ -369,5 +286,79 @@ describe('CompanyFilter Component', () => {
     await waitFor(() => {
       expect(selectButton).toHaveAttribute('aria-expanded', 'false');
     });
+  });
+
+  it('renders clear button', () => {
+    render(
+      <MockWrapper>
+        <CompanyFilter {...defaultProps} onFilterChange={mockOnFilterChange} />
+      </MockWrapper>
+    );
+
+    const clearButton = screen.getByRole('button', { name: /clear/i });
+    expect(clearButton).toBeInTheDocument();
+    expect(clearButton).toHaveTextContent('Clear');
+  });
+
+  it('clear button is disabled when no company is selected', () => {
+    render(
+      <MockWrapper>
+        <CompanyFilter {...defaultProps} selectedCompany="" onFilterChange={mockOnFilterChange} />
+      </MockWrapper>
+    );
+
+    const clearButton = screen.getByRole('button', { name: /clear/i });
+    expect(clearButton).toBeDisabled();
+  });
+
+  it('clear button is enabled when a company is selected', () => {
+    render(
+      <MockWrapper>
+        <CompanyFilter {...defaultProps} selectedCompany="Pfizer Inc." onFilterChange={mockOnFilterChange} />
+      </MockWrapper>
+    );
+
+    const clearButton = screen.getByRole('button', { name: /clear/i });
+    expect(clearButton).toBeEnabled();
+  });
+
+  it('calls onFilterChange with empty string when clear button is clicked', async () => {
+    const user = userEvent.setup();
+    
+    render(
+      <MockWrapper>
+        <CompanyFilter {...defaultProps} selectedCompany="Pfizer Inc." onFilterChange={mockOnFilterChange} />
+      </MockWrapper>
+    );
+
+    const clearButton = screen.getByRole('button', { name: /clear/i });
+    await user.click(clearButton);
+
+    expect(mockOnFilterChange).toHaveBeenCalledWith('');
+    expect(mockOnFilterChange).toHaveBeenCalledTimes(1);
+  });
+
+  it('clear button is disabled when component is disabled', () => {
+    render(
+      <MockWrapper>
+        <CompanyFilter {...defaultProps} selectedCompany="Pfizer Inc." disabled={true} onFilterChange={mockOnFilterChange} />
+      </MockWrapper>
+    );
+
+    const clearButton = screen.getByRole('button', { name: /clear/i });
+    expect(clearButton).toBeDisabled();
+  });
+
+  it('clear button has proper icon', () => {
+    render(
+      <MockWrapper>
+        <CompanyFilter {...defaultProps} selectedCompany="Pfizer Inc." onFilterChange={mockOnFilterChange} />
+      </MockWrapper>
+    );
+
+    const clearButton = screen.getByRole('button', { name: /clear/i });
+    // Check if the button contains an SVG (MUI icon)
+    const icon = clearButton.querySelector('svg');
+    expect(icon).toBeInTheDocument();
   });
 });
