@@ -116,10 +116,12 @@ const App: React.FC = () => {
   const formatDate = (dateString: string): string => {
     try {
       const date = new Date(dateString);
-      const day = date.getDate().toString().padStart(2, '0');
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const year = date.getFullYear().toString();
-      return `${day}.${month}.${year}`;
+      // Use the user's locale settings for date formatting
+      return date.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
     } catch {
       return 'Invalid Date';
     }
@@ -138,7 +140,7 @@ const App: React.FC = () => {
 
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Typography variant="h3" component="h1" gutterBottom align="center">
+      <Typography variant="h4" component="h1" gutterBottom align="center">
         Drug Information System
       </Typography>
 
