@@ -41,7 +41,7 @@ const App: React.FC = () => {
       loadDrugs();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCompany, currentPage, initialLoadComplete]);
+  }, [selectedCompany, currentPage]);
 
   const loadInitialData = async () => {
     try {
@@ -57,6 +57,8 @@ const App: React.FC = () => {
 
       setTableConfig(configData);
       setCompanies(companiesData);
+
+      console.log('Table config and companies loaded:', configData, companiesData);
 
       // Load initial drugs data
       const response = await drugService.getDrugs({

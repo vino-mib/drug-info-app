@@ -24,7 +24,7 @@ async function seedDatabase() {
     console.log('Cleared existing drug data');
 
     // Read the drug data JSON file
-    const drugDataPath = path.join(__dirname, '../../../drugData 2025.json');
+    const drugDataPath = path.join(__dirname, '../drugData 2025.json');
     const drugDataRaw = fs.readFileSync(drugDataPath, 'utf8');
     const drugData = JSON.parse(drugDataRaw);
 

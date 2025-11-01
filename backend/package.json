@@ -7,9 +7,12 @@
     "start": "node server.js",
     "start:file": "node serverFile.js",
     "dev": "nodemon server.js",
-    "dev:file": "nodemon serverFile.js",
     "test": "jest",
+    "test:unit": "jest",
     "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:verbose": "jest --verbose",
+    "test:silent": "jest --silent",
     "seed": "node scripts/seedDatabase.js"
   },
   "dependencies": {

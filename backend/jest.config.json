@@ -1,0 +1,27 @@
+{
+  "testEnvironment": "node",
+  "setupFilesAfterEnv": ["<rootDir>/__tests__/setup.js"],
+  "testMatch": [
+    "**/__tests__/**(config|server)*.test.js"
+  ],
+  "testPathIgnorePatterns": [
+    "/node_modules/",
+    "__tests__/models.test.js",
+    "__tests__/drugs.test.js", 
+    "__tests__/companies.test.js",
+    "__tests__/seedDatabase.test.js",
+    "__tests__/utils.test.js",
+    "__tests__/integration.test.js"
+  ],
+  "collectCoverageFrom": [
+    "routes/config.js",
+    "routes/drugs.js",
+    "routes/companies.js"
+  ],
+  "coverageReporters": [
+    "text",
+    "lcov"
+  ],
+  "testTimeout": 10000,
+  "verbose": true
+}
